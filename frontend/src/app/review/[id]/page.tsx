@@ -98,7 +98,8 @@ export default function ReviewPage() {
     setSaving(true);
     try {
       const payload: Record<string, string | number | null> = { ...formData };
-      payload.quantity_produced = parseInt(formData.quantity_produced, 10) || 0;
+      const parsedQty = parseInt(formData.quantity_produced, 10);
+      payload.quantity_produced = isNaN(parsedQty) ? null : parsedQty;
       
       await axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/records/${id}`, payload);
       setToastMessage("Record updated and validated successfully!");

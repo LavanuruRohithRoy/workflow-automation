@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
@@ -5,14 +6,19 @@ from fastapi.responses import JSONResponse
 
 app = FastAPI(title="AI-Powered Workflow Automation System API")
 
-origins = [
-    "http://localhost:3000",
-]
+# Strip and sanitize ALLOWED_ORIGINS from environment
+allowed_origins_env = os.getenv("ALLOWED_ORIGINS", "")
+if allowed_origins_env:
+    origins = [o.strip() for o in allowed_origins_env.split(",") if o.strip()]
+else:
+    origins = ["http://localhost:3000"]
+
+allow_all_origins = "*" in origins
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
+    allow_origins=["*"] if allow_all_origins else origins,
+    allow_credentials=not allow_all_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )

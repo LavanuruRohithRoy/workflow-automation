@@ -11,6 +11,8 @@ export const metadata: Metadata = {
   description: "Digitize handwritten manufacturing logs using Gemini",
 };
 
+import ConnectionObserver from "@/components/ConnectionObserver";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -49,6 +51,7 @@ export default function RootLayout({
           <div className="p-6">
             {children}
           </div>
+          <ConnectionObserver />
         </main>
       </body>
     </html>

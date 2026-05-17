@@ -24,5 +24,12 @@ Vercel is the creator of Next.js and provides the best hosting experience.
    - Add your Environment Variable: `NEXT_PUBLIC_API_URL` pointing to your Railway Backend URL (e.g., `https://backend-production.up.railway.app/api/v1`).
    - Deploy.
 
-## Database (Supabase)
 Your Supabase instance is already live. Ensure that the CORS settings in your Supabase project allow traffic from your Vercel frontend URL.
+
+## Database Performance Tuning
+To ensure instant data loads for the dashboard telemetry and historical log history as the system scales, create a database index on the foreign key relation column `document_id`:
+```sql
+CREATE INDEX IF NOT EXISTS idx_extracted_records_document_id 
+ON public.extracted_records(document_id);
+```
+Execute this SQL statement directly within the Supabase SQL Editor to complete performance optimization.

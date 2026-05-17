@@ -51,6 +51,7 @@ async def process_document_workflow(doc_id: str, file_path: str):
         if not isinstance(raw_data, list):
             raw_data = [raw_data]
             
+        records_to_insert = []
         for record_data in raw_data:
             values = {}
             confidences = {}
@@ -110,7 +111,7 @@ async def process_document_workflow(doc_id: str, file_path: str):
                 if errors:
                     validation_errors = errors
                 
-            supabase.table("extracted_records").insert({
+            records_to_insert.append({
                 "document_id": doc_id,
                 "date": validated_data.date,
                 "shift": validated_data.shift,
@@ -126,7 +127,10 @@ async def process_document_workflow(doc_id: str, file_path: str):
                 "status": record_status,
                 "validation_errors": validation_errors,
                 "raw_llm_response": record_data
-            }).execute()
+            })
+            
+        if records_to_insert:
+            supabase.table("extracted_records").insert(records_to_insert).execute()
         
         supabase.table("documents").update({"status": "completed"}).eq("id", doc_id).execute()
         logger.info(f"Successfully saved extracted_records for doc_id: {doc_id}")
