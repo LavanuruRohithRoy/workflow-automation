@@ -3,6 +3,26 @@ from app.database import get_supabase_client
 from app.services.ai_service import extract_document_data
 from app.schemas import ExtractionSchema
 
+def validate_record_data(data: dict) -> dict:
+    errors = {}
+    shift = data.get("shift")
+    if shift is not None and str(shift) not in ['1', '2', '3']:
+        errors["shift"] = "Shift must be '1', '2', or '3'"
+    
+    qty = data.get("quantity_produced")
+    if qty is not None:
+        try:
+            if int(qty) <= 0:
+                errors["quantity_produced"] = "Quantity must be a positive integer"
+        except ValueError:
+            errors["quantity_produced"] = "Quantity must be a valid integer"
+            
+    wo = data.get("work_order_number")
+    if wo is not None and (not isinstance(wo, str) or not str(wo).strip()):
+        errors["work_order_number"] = "Work Order must be a non-empty string"
+        
+    return errors
+
 async def process_document_workflow(doc_id: str, file_path: str):
     supabase = get_supabase_client()
     try:
@@ -46,10 +66,15 @@ async def process_document_workflow(doc_id: str, file_path: str):
         
         requires_manual_review = False
         record_status = 'completed'
+        validation_errors = None
         
-        if avg_confidence < 0.7 or wo_conf < 0.5 or qty_conf < 0.5:
+        errors = validate_record_data(values)
+        
+        if avg_confidence < 0.7 or wo_conf < 0.5 or qty_conf < 0.5 or errors:
             requires_manual_review = True
             record_status = 'processing'
+            if errors:
+                validation_errors = errors
             
         supabase.table("extracted_records").insert({
             "document_id": doc_id,
@@ -65,6 +90,7 @@ async def process_document_workflow(doc_id: str, file_path: str):
             "is_validated": not requires_manual_review,
             "requires_manual_review": requires_manual_review,
             "status": record_status,
+            "validation_errors": validation_errors,
             "raw_llm_response": raw_data
         }).execute()
         

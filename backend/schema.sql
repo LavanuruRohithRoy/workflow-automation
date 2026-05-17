@@ -23,5 +23,6 @@ CREATE TABLE IF NOT EXISTS public.extracted_records (
     is_validated BOOLEAN DEFAULT FALSE,
     requires_manual_review BOOLEAN DEFAULT FALSE,
     status TEXT DEFAULT 'processing',
-    raw_llm_response JSONB
+    raw_llm_response JSONB,
+    validation_errors JSONB
 );
