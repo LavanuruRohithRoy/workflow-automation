@@ -126,7 +126,7 @@ export default function ReviewPage() {
   const errors = record.validation_errors || {};
   const confs = record.confidence_scores || {};
 
-  const fields = [
+  const fields: { key: keyof FormDataState; label: string; type?: string }[] = [
     { key: "date", label: "Date" },
     { key: "shift", label: "Shift" },
     { key: "employee_number", label: "Employee Number" },
@@ -135,7 +135,7 @@ export default function ReviewPage() {
     { key: "work_order_number", label: "Work Order Number" },
     { key: "quantity_produced", label: "Quantity Produced", type: "number" },
     { key: "time_taken", label: "Time Taken" },
-  ] as const;
+  ];
 
   return (
     <>
