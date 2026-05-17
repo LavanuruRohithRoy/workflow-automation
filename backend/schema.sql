@@ -21,5 +21,7 @@ CREATE TABLE IF NOT EXISTS public.extracted_records (
     time_taken TEXT,
     confidence_scores JSONB,
     is_validated BOOLEAN DEFAULT FALSE,
+    requires_manual_review BOOLEAN DEFAULT FALSE,
+    status TEXT DEFAULT 'processing',
     raw_llm_response JSONB
 );
