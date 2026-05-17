@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { LayoutDashboard, Upload, History } from "lucide-react";
+import { LayoutDashboard, Upload, History, BarChart } from "lucide-react";
+import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,21 +24,24 @@ export default function RootLayout({
             Workflow AI
           </div>
           <nav className="flex-1 p-4 space-y-2">
-            <a href="#" className="flex items-center gap-3 px-3 py-2 rounded-md bg-slate-800 text-white">
+            <Link href="/dashboard" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-slate-800 hover:text-white transition">
               <LayoutDashboard className="w-5 h-5" />
               Dashboard
-            </a>
-            <a href="#" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-slate-800 hover:text-white transition">
+            </Link>
+            <Link href="/upload" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-slate-800 hover:text-white transition">
               <Upload className="w-5 h-5" />
-              Uploads
-            </a>
-            <a href="#" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-slate-800 hover:text-white transition">
+              Upload
+            </Link>
+            <Link href="/history" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-slate-800 hover:text-white transition">
               <History className="w-5 h-5" />
               History
-            </a>
+            </Link>
+            <Link href="#" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-slate-800 hover:text-white transition opacity-50 cursor-not-allowed">
+              <BarChart className="w-5 h-5" />
+              Analytics (Soon)
+            </Link>
           </nav>
         </aside>
-
         <main className="flex-1 overflow-y-auto">
           <header className="bg-white shadow-sm h-16 flex items-center px-6 md:hidden">
             <span className="text-xl font-bold">Workflow AI</span>

@@ -3,6 +3,11 @@
 ## Overview
 An AI-powered manufacturing digitization system designed to ingest, process, and digitize handwritten manufacturing logs using Google Gemini 2.5 Flash. It orchestrates complex document pipelines through Supabase Storage and flags records requiring manual validation based on intelligent confidence scoring and strict business rules.
 
+## Key Features
+- **Multi-Record Extraction**: Dynamically parses single multi-row logs into multiple distinct records linked to the same parent document, maintaining a clean visual nesting hierarchy (`↳`) in the UI history.
+- **Intelligent Repair Loop**: Automatic self-healing loop that intercepts JSON formatting issues from the LLM, feeds back syntactic errors in a secondary correction prompt, and repairs extraction results in real-time.
+- **Industrial Tremor Dashboard**: A sleek, locked, 3-column KPI layout and dense charts (Donut & Bar) showing real-time validation success rates and aggregated shift-wise production totals.
+
 ## Architecture
 ```
 [Next.js Frontend] <---(REST API)---> [FastAPI Backend]
@@ -51,10 +56,18 @@ The orchestration pipeline runs asynchronously:
     npm run dev
     ```
 
-### Docker
-To spin up the entire orchestration pipeline:
+### Local Development (via Docker - Preferred)
+To spin up the entire orchestration pipeline identically to production:
 ```bash
 docker-compose up --build
 ```
 - API Docs: http://localhost:8000/docs
 - Web App: http://localhost:3000
+
+### Manual Python/Node Setup
+
+---
+
+## Live Demo & Pitch
+- **Hosted Demo**: [https://ai-workflow-demo.vercel.app](https://ai-workflow-demo.vercel.app)
+- **Demo Video**: [https://youtu.be/demo-link](https://youtu.be/demo-link)

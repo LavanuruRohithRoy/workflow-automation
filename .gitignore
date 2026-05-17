@@ -54,3 +54,4 @@ Thumbs.db
 
 # Explicit User Ignores
 backend/.env
+frontend/.env.local
